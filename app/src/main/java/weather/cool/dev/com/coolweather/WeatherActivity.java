@@ -28,6 +28,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import weather.cool.dev.com.coolweather.gson.Forecast;
 import weather.cool.dev.com.coolweather.gson.Weather;
+import weather.cool.dev.com.coolweather.service.AutoUpdateService;
 import weather.cool.dev.com.coolweather.util.HttpUtil;
 import weather.cool.dev.com.coolweather.util.Utility;
 
@@ -217,19 +218,24 @@ public class WeatherActivity extends AppCompatActivity {
             minText.setText(forecast.temperature.min);
             forecastLayout.addView(view);
         }
-        if (weather.aqi != null) {
-            aqiText.setText(weather.aqi.city.aqi);
-            pm25Text.setText(weather.aqi.city.pm25);
-        }
-        String comfort = "舒适度：" + weather.suggestion.comfort.info;
-        String carWash = "洗车指数：" + weather.suggestion.carWash.info;
-        String sport = "运行建议：" + weather.suggestion.sport.info;
-        comfortText.setText(comfort);
-        carWashText.setText(carWash);
-        sportText.setText(sport);
-        weatherLayout.setVisibility(View.VISIBLE);
-        //Intent intent = new Intent(this, AutoUpdateService.class);
-        //startService(intent);
+        //if(weather !=null && weather.status=="ok") {
+            if (weather.aqi != null) {
+                aqiText.setText(weather.aqi.city.aqi);
+                pm25Text.setText(weather.aqi.city.pm25);
+            }
+
+            String comfort = "舒适度：" + weather.suggestion.comfort.info;
+            String carWash = "洗车指数：" + weather.suggestion.carWash.info;
+            String sport = "运行建议：" + weather.suggestion.sport.info;
+            comfortText.setText(comfort);
+            carWashText.setText(carWash);
+            sportText.setText(sport);
+            weatherLayout.setVisibility(View.VISIBLE);
+            Intent intent = new Intent(this, AutoUpdateService.class);
+            startService(intent);
+//        }else{
+//            Toast.makeText(WeatherActivity.this,"获取天气信息失败",Toast.LENGTH_SHORT).show();
+//        }
     }
 
 }
