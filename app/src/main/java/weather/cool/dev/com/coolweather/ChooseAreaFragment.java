@@ -1,6 +1,7 @@
 package weather.cool.dev.com.coolweather;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,6 +30,7 @@ import okhttp3.Response;
 import weather.cool.dev.com.coolweather.db.City;
 import weather.cool.dev.com.coolweather.db.County;
 import weather.cool.dev.com.coolweather.db.Province;
+import weather.cool.dev.com.coolweather.gson.Weather;
 import weather.cool.dev.com.coolweather.util.HttpUtil;
 import weather.cool.dev.com.coolweather.util.Utility;
 
@@ -102,6 +104,20 @@ public class ChooseAreaFragment extends Fragment {
                 }else if(currentLevel == LEVEL_CITY){
                     selectedCity = cityList.get(position);
                     queryCounties();
+                }else if(currentLevel==LEVEL_COUNTY){
+                    String weatherId=countyList.get(position).getWeatherId();
+                    if(getActivity() instanceof MainActivity){
+                        Intent intent=new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("weather_id",weatherId);
+                        startActivity(intent);
+                        getActivity().fileList();
+                    }else if(getActivity() instanceof WeatherActivity){
+                        WeatherActivity activity=(WeatherActivity)getActivity();
+                        activity.drawerLayout.closeDrawers();
+                        activity.swipeRefresh.setRefreshing(true);
+                        activity.requestWeather(weatherId);
+                    }
+
                 }
             }
         });
